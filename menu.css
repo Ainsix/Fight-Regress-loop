@@ -1,0 +1,30 @@
+.btn-game-primary {
+  background: #f5b301;
+  color: #1b1b2f;
+  border: 2px solid #c98f00;
+  font-weight: 700;
+  box-shadow: 0 4px 0 #c98f00;
+}
+.btn-game-primary:hover {
+  background: #ffc933;
+  transform: translateY(-2px);
+}
+.btn-game-primary:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #c98f00;
+}
+
+.btn-game-danger {
+  background: #b3261e;
+  color: #fff;
+  border: 2px solid #7f1a15;
+  font-weight: 700;
+  box-shadow: 0 4px 0 #7f1a15;
+}
+.btn-game-danger:hover {
+  background: #d13a31;
+}
+
+body{
+    background-color: green;
+}
