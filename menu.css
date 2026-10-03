@@ -23,8 +23,27 @@
 }
 .btn-game-danger:hover {
   background: #d13a31;
+  transform: translateY(-2px);
+
 }
 
-body{
-    background-color: green;
+.hutan {
+  position: fixed;
+  inset: 0  ;
+  pointer-events: none;
+  user-select: none;
+  overflow: hidden;
 }
+
+.pohon {
+  position: absolute;
+  margin: 0;
+  line-height: 1;
+  font-family: "Courier New", monospace;
+  white-space: pre;
+  overflow: visible;     
+  width: max-content; 
+}
+
+.daun   { color: #2ea043; }
+.batang { color: #8b5a2b; }
