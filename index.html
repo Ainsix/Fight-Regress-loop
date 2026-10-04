@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fight Regress Loop</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Latar pohon ASCII (diisi oleh game.js) -->
+  <div id="hutan" class="hutan" aria-hidden="true"></div>
+
+  <header class="judul">
+    <h1>Fight Regress Loop</h1>
+  </header>
+
+  <main class="panggung">
+
+    <!-- Status pertandingan: muncul setelah klik Mulai Game -->
+    <section id="hud" class="hud" aria-label="Status permainan" hidden>
+      <span id="hud-gelombang">Gelombang 1</span>
+      <span id="hud-waktu">Waktu 00:00</span>
+      <span class="hud-timer">
+        <span id="hud-timer">Item baru dalam 8 dtk</span>
+        <span class="bar kecil" aria-hidden="true"><span id="bar-item" class="isi item"></span></span>
+      </span>
+      <span id="hud-antrian" hidden></span>
+    </section>
+
+    <!-- Arena: karakter berdiri di atas garis tanah (border bawah) -->
+    <section id="arena" class="arena mode-menu" aria-label="Arena pertarungan">
+
+      <article class="petarung" id="petarung-pemain">
+        <div class="status">
+          <p class="nama">Kamu</p>
+          <div class="bar" id="bar-pemain" role="progressbar" aria-label="HP pemain"
+               aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
+            <div class="isi pemain" id="isi-pemain"></div>
+          </div>
+          <p class="angka">
+            <span id="teks-hp-pemain">100/100</span>
+            <span id="teks-perisai">🛡️ 0</span>
+          </p>
+        </div>
+        <pre class="tubuh" id="tubuh-pemain" aria-hidden="true"> \O/
+  |
+ / \</pre>
+      </article>
+
+      <article class="petarung tersembunyi" id="petarung-musuh">
+        <div class="status">
+          <p class="nama" id="nama-musuh">Musuh</p>
+          <div class="bar" id="bar-musuh" role="progressbar" aria-label="HP musuh"
+               aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
+            <div class="isi musuh" id="isi-musuh"></div>
+          </div>
+          <p class="angka"><span id="teks-hp-musuh">0/0</span></p>
+        </div>
+        <pre class="tubuh" id="tubuh-musuh" aria-hidden="true"></pre>
+      </article>
+
+    </section>
+
+    <!-- Menu awal: Mulai Game di tengah, Exit di sampingnya -->
+    <section id="layar-menu" class="menu" aria-label="Menu utama">
+      <button type="button" id="tombol-mulai" class="tombol mulai">Mulai Game</button>
+      <button type="button" id="tombol-exit" class="tombol keluar">Exit</button>
+      <p id="pesan-keluar" class="pesan-keluar" hidden>Terima kasih sudah bermain! Silakan tutup tab ini.</p>
+    </section>
+
+    <!-- Layar permainan: tas di tengah -->
+    <section id="layar-game" class="layar-game" aria-label="Tas item" hidden>
+      <div id="backpack" class="backpack" aria-label="Tas berukuran 7 kolom kali 5 baris"></div>
+      <p class="petunjuk">Seret item ke slot lain untuk memindahkan. Seret keluar kotak untuk membuangnya.</p>
+      <ul id="log" class="log" aria-live="polite"></ul>
+    </section>
+
+  </main>
+
+  <!-- Layar kalah -->
+  <div id="overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="overlay-judul" hidden>
+    <div class="panel">
+      <h2 id="overlay-judul">Kamu Kalah</h2>
+      <p id="overlay-teks"></p>
+      <div class="menu">
+        <button type="button" id="tombol-ulang" class="tombol mulai">Main Lagi</button>
+        <button type="button" id="tombol-menu" class="tombol keluar">Ke Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="kaki">
+    <small>Game roguelike auto-battle bergaya tas, dibuat dengan HTML, CSS, dan JavaScript.</small>
+  </footer>
+
+  <script src="game.js"></script>
+</body>
+</html>

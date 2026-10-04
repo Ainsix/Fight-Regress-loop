@@ -1,0 +1,384 @@
+/* =====================================================
+   Fight Regress Loop — style.css
+   Tema gelap bergaya ASCII, tanpa Bootstrap.
+   Ukuran slot tas diatur lewat variabel --ukuran-slot
+   (otomatis mengecil di layar kecil).
+   ===================================================== */
+
+/* ---------- 1. Variabel warna & ukuran ---------- */
+:root {
+  --latar: #0d1117;
+  --teks: #e6edf3;
+  --teks-redup: #9da7b3;
+  --garis: #ffffff;      /* garis tanah tempat karakter berdiri */
+  --emas: #d4a017;
+  --merah: #8b1a1a;
+  --hijau: #2ea043;
+  --kayu: #8b5a2b;
+  --ukuran-slot: 56px;
+}
+
+/* ---------- 2. Dasar ---------- */
+* { box-sizing: border-box; }
+
+/* atribut hidden harus selalu menang atas display lain */
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--latar);
+  color: var(--teks);
+  font-family: "Segoe UI", system-ui, sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+/* ---------- 3. Latar hutan ASCII ---------- */
+/* Strip di bagian atas layar; dasar pohon rata dengan bawah strip */
+.hutan {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 22vh;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+
+.pohon {
+  position: absolute;
+  bottom: 0;
+  margin: 0;
+  width: max-content;
+  overflow: visible;
+  line-height: 1;
+  white-space: pre;
+  font-family: "Courier New", monospace;
+}
+
+.daun   { color: var(--hijau); }
+.batang { color: var(--kayu); }
+
+/* ---------- 4. Kerangka halaman ---------- */
+.judul,
+.panggung,
+.kaki {
+  position: relative;
+  z-index: 1;               /* di atas hutan */
+}
+
+.judul {
+  padding-top: 15vh;        /* ruang untuk pohon di atas */
+  text-align: center;
+}
+
+.judul h1 {
+  margin: 0;
+  font-family: "Courier New", monospace;
+  font-size: clamp(1.4rem, 4vw, 2.2rem);
+  letter-spacing: 0.08em;
+}
+
+/* judul disembunyikan saat bermain supaya tas muat di layar */
+body.bermain .judul h1 { display: none; }
+
+.panggung {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 12px 24px;
+}
+
+.kaki {
+  padding: 10px;
+  text-align: center;
+  color: var(--teks-redup);
+}
+
+/* ---------- 5. HUD (timer & status) ---------- */
+.hud {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px 22px;
+  padding: 8px 16px;
+  font-size: 0.95rem;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+}
+
+.hud-timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ---------- 6. Arena & petarung ---------- */
+/* Garis tanah = border bawah arena; karakter menempel di atasnya */
+.arena {
+  width: min(92vw, 1000px);
+  min-height: 170px;
+  padding: 0 4vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 5px solid var(--garis);
+}
+
+.petarung {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 140px;
+}
+
+.petarung.tersembunyi { visibility: hidden; }
+
+/* di menu: HP bar disembunyikan tanpa mengubah tinggi arena */
+.arena.mode-menu .status { visibility: hidden; }
+
+.status { text-align: center; }
+
+.nama,
+.angka {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.angka { color: var(--teks-redup); }
+.angka span + span { margin-left: 8px; }
+
+.tubuh {
+  margin: 0;
+  font-family: "Courier New", monospace;
+  font-size: 1.5rem;
+  line-height: 1.05;
+  white-space: pre;
+}
+
+/* bar HP */
+.bar {
+  width: 140px;
+  height: 10px;
+  margin: 4px auto;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 5px;
+}
+
+.bar.kecil { width: 90px; height: 6px; margin: 0; display: inline-block; }
+
+.bar .isi {
+  display: block;
+  height: 100%;
+  width: 100%;
+  transition: width 0.15s linear;
+}
+
+.isi.pemain { background: var(--hijau); }
+.isi.musuh  { background: #d9534f; }
+.isi.item   { background: var(--emas); transition: none; }
+
+/* efek terkena serangan */
+.kena { animation: kena 0.25s; }
+
+@keyframes kena {
+  0%   { filter: brightness(2.2); transform: translateX(-4px); }
+  50%  { transform: translateX(4px); }
+  100% { filter: none; transform: none; }
+}
+
+/* ---------- 7. Tombol menu ---------- */
+.menu {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px 28px;
+  margin-top: 36px;
+}
+
+.tombol {
+  --aksen: var(--emas);
+  min-width: 190px;
+  padding: 14px 24px;
+  font-size: 1.1rem;
+  color: #fff;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid transparent;
+  border-bottom: 5px solid var(--aksen);
+  border-radius: 4px 4px 12px 12px;
+  transition: background 0.15s, box-shadow 0.15s;
+}
+
+.tombol.keluar { --aksen: var(--merah); }
+
+.tombol:hover {
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 0 16px var(--aksen);
+}
+
+.pesan-keluar {
+  flex-basis: 100%;
+  margin: 0;
+  text-align: center;
+  color: var(--teks-redup);
+}
+
+/* ---------- 8. Layar permainan & tas ---------- */
+.layar-game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.backpack {
+  /* --kolom dan --baris diisi oleh game.js */
+  display: grid;
+  grid-template-columns: repeat(var(--kolom, 7), var(--ukuran-slot));
+  grid-template-rows: repeat(var(--baris, 5), var(--ukuran-slot));
+  gap: 4px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid var(--kayu);
+  border-radius: 8px;
+}
+
+.slot {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 4px;
+}
+
+/* slot yang dipakai item: diberi warna item tersebut */
+.slot.terisi {
+  background: rgba(var(--warna), 0.35);
+  border-color: rgb(var(--warna));
+}
+
+/* lapisan item di atas slot */
+.item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: grab;
+  user-select: none;
+  background: rgba(var(--warna), 0.1);
+  border: 2px solid rgb(var(--warna));
+  border-radius: 6px;
+}
+
+.item:active { cursor: grabbing; }
+
+.ukuran {
+  position: absolute;
+  top: 2px;
+  right: 5px;
+  font-size: 0.65rem;
+  font-weight: bold;
+  opacity: 0.85;
+}
+
+/* bar cooldown di dasar item */
+.item .cd {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 4px;
+  background: rgb(var(--warna));
+  transform-origin: left;
+  transform: scaleX(0);
+}
+
+/* efek saat item aktif */
+.item.aktif { animation: aktif 0.25s; }
+
+@keyframes aktif {
+  50% { transform: scale(1.08); filter: brightness(1.6); }
+}
+
+.petunjuk {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--teks-redup);
+  text-align: center;
+}
+
+/* saat item sedang diseret, petunjuk dipertegas */
+body.sedang-drag .petunjuk {
+  color: #ff7b72;
+  font-weight: bold;
+}
+
+.log {
+  min-height: 6.5em;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.85rem;
+  color: var(--teks-redup);
+  text-align: center;
+}
+
+/* ---------- 9. Layar kalah ---------- */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.panel {
+  width: min(90vw, 420px);
+  padding: 28px 24px;
+  text-align: center;
+  background: var(--latar);
+  border: 2px solid var(--kayu);
+  border-radius: 10px;
+}
+
+.panel h2 { margin: 0 0 8px; }
+.panel p  { margin: 0; color: var(--teks-redup); }
+.panel .menu { margin-top: 24px; }
+
+/* ---------- 10. Responsif ---------- */
+@media (max-width: 768px) {
+  :root { --ukuran-slot: 46px; }
+  .tubuh { font-size: 1.2rem; }
+  .arena { padding: 0 2vw; }
+}
+
+@media (max-width: 480px) {
+  :root { --ukuran-slot: 38px; }
+  .tubuh { font-size: 1rem; }
+  .petarung { min-width: 100px; }
+  .bar { width: 100px; }
+  .tombol { min-width: 150px; padding: 12px 16px; }
+  .menu { gap: 14px; }
+}
+
+/* hormati pengguna yang mematikan animasi */
+@media (prefers-reduced-motion: reduce) {
+  .kena,
+  .item.aktif { animation: none; }
+  .bar .isi { transition: none; }
+}
